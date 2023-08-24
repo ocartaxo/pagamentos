@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/kofood-tst
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+
+  jpa:
+    show-sql: on
+    properties:
+      hibernate:
+        format_sql: true
+
+
+  flyway:
+    driver-class-name: org.postgresql.Driver
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://${DB_URI}:${DB_PORT}/kofood-tst
