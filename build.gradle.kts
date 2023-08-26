@@ -34,13 +34,22 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-server")
+
     implementation("org.flywaydb:flyway-core")
     runtimeOnly("org.postgresql:postgresql")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+
+
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+//    testImplementation("org.testcontainers:testcontainers:1.19.0")
+//    testImplementation("org.testcontainers:postgresql:1.19.0")
+
+//    testImplementation("io.kotest.extensions:kotest-extensions-testcontainers:2.0.2")
 
 }
 

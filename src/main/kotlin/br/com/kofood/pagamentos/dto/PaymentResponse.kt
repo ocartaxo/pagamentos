@@ -21,5 +21,6 @@ data class PaymentResponse(
         @JsonProperty("pedido_id")
         val orderId: Long,
         @JsonProperty("metodo_pagamento_id")
-        val paymentMethodId: Long
+        val paymentMethodId: Long,
+        val status: Status
 )

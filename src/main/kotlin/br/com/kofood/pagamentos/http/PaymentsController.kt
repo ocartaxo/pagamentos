@@ -24,8 +24,8 @@ class PaymentsController(
             @RequestBody @Valid request: PaymentRequest,
             builder: UriComponentsBuilder
     ): ResponseEntity<PaymentResponse> {
-        val newPayment = service.create(request)
-        val uri = builder.buildAndExpand("/pagamentos/${newPayment.id}").toUri()
+        val response = service.create(request)
+        val uri = builder.path("/pagamentos/{id}").buildAndExpand(response.id).toUri()
         return ResponseEntity.created(uri).build()
     }
 

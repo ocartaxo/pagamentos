@@ -1,7 +1,24 @@
 spring:
-  profiles:
-    active:
-      - dev
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/kofood-pagamentos
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+
+  jpa:
+    show-sql: on
+    properties:
+      hibernate:
+        format_sql: true
+
+
+  flyway:
+    driver-class-name: org.postgresql.Driver
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/kofood-pagamentos-tst
 
   application:
-    name: pagamentos
+    name: pagamentos-ms
+
