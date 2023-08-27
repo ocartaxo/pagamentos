@@ -4,6 +4,7 @@ import br.com.kofood.pagamentos.dto.PaymentRequest
 import br.com.kofood.pagamentos.dto.PaymentResponse
 import br.com.kofood.pagamentos.dto.PaymentUpdate
 import br.com.kofood.pagamentos.service.PaymentService
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker
 import jakarta.validation.Valid
 import org.jetbrains.annotations.NotNull
 import org.springframework.data.domain.Pageable
@@ -45,5 +46,8 @@ class PaymentsController(
     fun delete(@PathVariable id: Long) = ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.deleteById(id))
 
     @PatchMapping("/{id}/confirmar")
+    @CircuitBreaker(name="updatePayment", fallbackMethod = "authorizedPaymentWithPendency")
     fun paymentConfirm(@PathVariable id: Long) = ResponseEntity.ok().body(service.paymentConfirm(id))
+
+    fun authorizedPaymentWithPendency(id: Long, e: Exception) = service.authorizePaymentWithPendency(id)
 }
