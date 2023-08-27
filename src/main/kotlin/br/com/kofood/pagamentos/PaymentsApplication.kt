@@ -3,9 +3,10 @@ package br.com.kofood.pagamentos
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
+
 @SpringBootApplication
-class PagamentosApplication
+class PaymentsApplication
 
 fun main(args: Array<String>) {
-    runApplication<PagamentosApplication>(*args)
+    runApplication<PaymentsApplication>(*args)
 }
