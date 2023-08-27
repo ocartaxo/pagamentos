@@ -17,8 +17,21 @@ spring:
     driver-class-name: org.postgresql.Driver
     user: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    url: jdbc:postgresql://localhost:5432/kofood-pagamentos-tst
+    url: jdbc:postgresql://localhost:5432/kofood-pagamentos
+    validate-on-migrate: false
+    baseline-on-migrate: true
 
   application:
     name: pagamentos-ms
 
+server:
+  port: 0
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8081/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${random.int}
+    prefer-ip-address: true
