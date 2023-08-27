@@ -44,11 +44,24 @@ class PaymentService(
     fun deleteById(id: Long) = repository.deleteById(id)
 
     fun paymentConfirm(id: Long) {
-        val p = repository.findById(id).orElseThrow { EntityNotFoundException("Pagamento não encontrado!") }
-
-        p.status = Status.CONFIRMED
+        val p = updatePaymentStatus(id, Status.CONFIRMED)
 
         ordersClient.updateOrder(p.orderId)
+    }
+
+    fun authorizePaymentWithPendency(id: Long){
+        val p = updatePaymentStatus(id, Status.CONFIRMED_WITHOUT_INTEGRATION)
+
+    }
+
+    private fun updatePaymentStatus(paymentId: Long, newStatus: Status): Payment{
+        val p = repository.findById(paymentId)
+            .orElseThrow { EntityNotFoundException("Pagamento não encontrado!") }
+
+        p.status = newStatus
+        repository.save(p)
+
+        return p
     }
 
 }
