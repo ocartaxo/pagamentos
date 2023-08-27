@@ -29,28 +29,28 @@ apply {
     plugin("kotlin-kapt")
 }
 
+extra["springCloudVersion"] = "2022.0.4"
+
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-server")
-
     implementation("org.flywaydb:flyway-core")
-    runtimeOnly("org.postgresql:postgresql")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-
-
-
+    runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-//    testImplementation("org.testcontainers:testcontainers:1.19.0")
-//    testImplementation("org.testcontainers:postgresql:1.19.0")
 
-//    testImplementation("io.kotest.extensions:kotest-extensions-testcontainers:2.0.2")
 
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+    }
 }
 
 tasks.withType<KotlinCompile> {
