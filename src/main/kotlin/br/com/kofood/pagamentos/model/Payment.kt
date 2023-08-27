@@ -42,7 +42,7 @@ data class Payment(
 
         @NotNull
         @Enumerated(value = EnumType.STRING)
-        val status: Status = Status.CREATED,
+        var status: Status = Status.CREATED,
 
         @NotNull
         @Column(name="pedido_id")
