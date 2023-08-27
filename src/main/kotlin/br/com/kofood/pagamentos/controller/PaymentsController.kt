@@ -1,4 +1,4 @@
-package br.com.kofood.pagamentos.http
+package br.com.kofood.pagamentos.controller
 
 import br.com.kofood.pagamentos.dto.PaymentRequest
 import br.com.kofood.pagamentos.dto.PaymentResponse
@@ -43,4 +43,7 @@ class PaymentsController(
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Long) = ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.deleteById(id))
+
+    @PatchMapping("/{id}/confirmar")
+    fun paymentConfirm(@PathVariable id: Long) = ResponseEntity.ok().body(service.paymentConfirm(id))
 }
