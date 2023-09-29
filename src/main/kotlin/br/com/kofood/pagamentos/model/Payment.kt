@@ -28,6 +28,7 @@ data class Payment(
 
         @NotBlank
         @Size(max=19)
+        @Column(name = "numero")
         val number: String,
 
         @NotBlank
@@ -49,7 +50,7 @@ data class Payment(
         val orderId: Long,
 
         @NotNull
-        @Column(name="metodo_pagamento_id")
+        @Column(name="forma_pagamento_id")
         val paymentMethodId: Long
 
 ) {
