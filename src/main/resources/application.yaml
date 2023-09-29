@@ -1,10 +1,13 @@
 spring:
+
+  application:
+    name: pagamentos-ms
+
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/kofood-pagamentos
+    url: jdbc:postgresql://localhost:5432/pagamentos
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-
 
   jpa:
     show-sql: on
@@ -12,17 +15,19 @@ spring:
       hibernate:
         format_sql: true
 
-
   flyway:
     driver-class-name: org.postgresql.Driver
     user: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    url: jdbc:postgresql://localhost:5432/kofood-pagamentos
+    url: jdbc:postgresql://localhost:5432/pagamentos
     validate-on-migrate: false
     baseline-on-migrate: true
 
-  application:
-    name: pagamentos-ms
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: kofood
+    password: kofood
 
 server:
   port: 0
@@ -40,7 +45,7 @@ resilience4j:
   circuitbreaker:
     instances:
       updatePayment:
-        sliding-window-size: 3
-        minimum-number-of-calls: 2
-        wait-duration-in-open-state:
-          seconds: 90
+        slidingWindowSize: 3
+        minimumNumberOfCalls: 2
+        waitDurationInOpenState: 30000
+
