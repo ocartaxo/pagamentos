@@ -2,8 +2,6 @@ package br.com.kofood.pagamentos.dto
 
 import br.com.kofood.pagamentos.model.Status
 import com.fasterxml.jackson.annotation.JsonProperty
-import jakarta.validation.constraints.NotBlank
-import org.jetbrains.annotations.NotNull
 import java.math.BigDecimal
 
 data class PaymentResponse(
