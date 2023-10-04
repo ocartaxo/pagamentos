@@ -25,8 +25,8 @@ data class PaymentRequest(
         @NotNull
         @JsonProperty("pedido_id")
         val orderId: Long,
-        @NotNull
-        @JsonProperty("metodo_pagamento_id")
-        val paymentMethodId: Long
+        @NotBlank
+        @JsonProperty("metodo_pagamento")
+        val acceptablePaymentMethods: AcceptablePaymentMethods
 
 )
