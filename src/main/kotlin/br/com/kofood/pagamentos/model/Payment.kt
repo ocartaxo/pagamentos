@@ -23,8 +23,8 @@ data class Payment(
 
         @NotBlank
         @Size(max=169)
-        @Column(name = "nome")
-        var name: String,
+        @Column(name = "nome_usuario")
+        var username: String,
 
         @NotBlank
         @Size(max=19)
@@ -50,13 +50,14 @@ data class Payment(
         val orderId: Long,
 
         @NotNull
+        @OneToOne(cascade = [CascadeType.PERSIST])
         @Column(name="forma_pagamento_id")
-        val paymentMethodId: Long
+        val paymentMethod: PaymentMethod
 
 ) {
         fun update(newInfo: PaymentUpdate) {
                 this.value = newInfo.value ?: this.value
-                this.name = newInfo.name ?: this.name
+                this.username = newInfo.name ?: this.username
                 this.code = newInfo.code ?: this.code
         }
 }
