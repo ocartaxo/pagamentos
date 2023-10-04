@@ -1,7 +1,6 @@
 package br.com.kofood.pagamentos.controller
 
-import br.com.kofood.pagamentos.amqp.QueuesProperties.PAYMENT_CREATED
-import br.com.kofood.pagamentos.amqp.QueuesProperties.PAYMENT_CONFIRMED
+import br.com.kofood.pagamentos.amqp.PaymentsAMQPConfiguration.Companion.PAYMENT_EXCHANGE
 import br.com.kofood.pagamentos.dto.PaymentRequest
 import br.com.kofood.pagamentos.dto.PaymentResponse
 import br.com.kofood.pagamentos.dto.PaymentUpdate
@@ -21,8 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder
 @RestController
 @RequestMapping("/pagamentos")
 class PaymentsController(
-    private val service: PaymentService,
-    private val rabbitTemplate: RabbitTemplate
+    private val service: PaymentService
 
 ) {
 
@@ -33,9 +31,6 @@ class PaymentsController(
     ): ResponseEntity<PaymentResponse> {
         val response = service.create(request)
         val uri = builder.path("/pagamentos/{id}").buildAndExpand(response.id).toUri()
-
-        val message = Message("Criei um pagamento com id ${response.id}".toByteArray())
-        rabbitTemplate.send(PAYMENT_CREATED, message)
 
         return ResponseEntity.created(uri).body(response)
     }
@@ -57,11 +52,10 @@ class PaymentsController(
 
     @PatchMapping("/{id}/confirmar")
     @CircuitBreaker(name = "updatePayment", fallbackMethod = "authorizedPaymentWithPendency")
-    fun paymentConfirm(@PathVariable id: Long): ResponseEntity<Unit> {
-        val message = Message("O pagamaneto de id $id foi confirmado.".toByteArray())
-        rabbitTemplate.send(PAYMENT_CONFIRMED, message)
-        return ResponseEntity.ok().body(service.paymentConfirm(id))
-    }
+    fun confirmPayment(@PathVariable id: Long) = ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.paymentConfirm(id))
+
+    @PatchMapping("/{id}/cancelar")
+    fun cancelPayment(@PathVariable id: Long) = ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.cancelPayment(id))
 
     fun authorizedPaymentWithPendency(id: Long, e: Exception) = service.authorizePaymentWithPendency(id)
 }
