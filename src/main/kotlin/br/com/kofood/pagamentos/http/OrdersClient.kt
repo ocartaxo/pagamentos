@@ -5,10 +5,12 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 
-@FeignClient("pedidos-ms")
+@FeignClient("pedidos-ms", path = "/pedidos")
 interface OrdersClient {
 
-    @RequestMapping("/pedidos/{id}/pago",method = [RequestMethod.PUT])
-    fun updateOrder(@PathVariable id: Long)
+    @RequestMapping("/{id}/pagar", method = [RequestMethod.PUT])
+    fun approvePayment(@PathVariable id: Long)
 
+    @RequestMapping("/{id}/cancelar", method = [RequestMethod.PUT])
+    fun cancelPayment(@PathVariable id: Long)
 }
