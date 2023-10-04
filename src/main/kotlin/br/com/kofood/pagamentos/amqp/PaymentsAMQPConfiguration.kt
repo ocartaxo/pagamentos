@@ -1,12 +1,10 @@
 package br.com.kofood.pagamentos.amqp
 
-import br.com.kofood.pagamentos.amqp.QueuesProperties.PAYMENT_CONFIRMED
-import br.com.kofood.pagamentos.amqp.QueuesProperties.PAYMENT_CREATED
-import br.com.kofood.pagamentos.model.Status
-import org.springframework.amqp.core.Queue
-import org.springframework.amqp.core.QueueBuilder
+import org.springframework.amqp.core.FanoutExchange
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
 import org.springframework.amqp.rabbit.core.RabbitAdmin
+import org.springframework.amqp.rabbit.core.RabbitTemplate
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
 import org.springframework.context.annotation.Bean
@@ -17,11 +15,10 @@ import org.springframework.context.annotation.Configuration
 class PaymentsAMQPConfiguration {
 
     @Bean
-    fun buildPaymentsCreatedQueue(): Queue = QueueBuilder.nonDurable(PAYMENT_CREATED).build()
+    fun messageConverter() = Jackson2JsonMessageConverter()
 
     @Bean
-    fun buildPaymentsConfirmedQueue(): Queue = QueueBuilder.nonDurable(PAYMENT_CONFIRMED).build()
-
+    fun fanoutExchange(): FanoutExchange = FanoutExchange(PAYMENT_EXCHANGE)
 
     @Bean
     fun buildRabbitAdmin(cf: ConnectionFactory): RabbitAdmin = RabbitAdmin(cf)
@@ -29,6 +26,23 @@ class PaymentsAMQPConfiguration {
     @Bean
     fun startRabbitAdmin(rabbitAdmin: RabbitAdmin): ApplicationListener<ApplicationReadyEvent> {
         return ApplicationListener<ApplicationReadyEvent> { event -> rabbitAdmin.initialize() }
+    }
+
+    @Bean
+    fun rabbitTemplate(
+        cf: ConnectionFactory,
+        mc: Jackson2JsonMessageConverter
+    ): RabbitTemplate {
+
+        val rabbitTemplate = RabbitTemplate(cf)
+        rabbitTemplate.messageConverter = mc
+
+        return rabbitTemplate
+    }
+
+    companion object{
+        const val PAYMENT_EXCHANGE = "payment.exchange"
+
     }
 
 }
